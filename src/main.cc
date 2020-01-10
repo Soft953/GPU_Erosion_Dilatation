@@ -1,9 +1,5 @@
 #include <stdio.h>
 #include <opencv2/opencv.hpp>
-//#include <opencv2/highgui/highgui.hpp>
-//#include <opencv2/imgproc/imgproc.hpp>
-//#include <opencv2/core/core.hpp>
-
 
 using namespace cv;
 
@@ -83,7 +79,6 @@ int** erosion(int** src, Kernel type, int rows, int cols, int height, int width,
 	for (int i = 0; i < rows; i+=stride) {
 		for (int j = 0; j < cols; j+=stride) {
 			if (kernelMatchErosion(src, kernel, rows, cols, height, width, i, j)) {
-				std::cout << "j: " << j << " width / 2: " << width / 2 << " sum: " << j + (width / 2) << std::endl;
 				res[i + (height / 2)][j + (width / 2)] = 1;
 			}
 		}
@@ -95,7 +90,6 @@ int kernelMatchDilatation(int** src, int** kernel, int rows, int cols, int x, in
 	int match = 0;
 	for (int i = 0; i < x; i++) {
 		for (int j = 0; j < y; j++) {
-			//std::cout << "Kernel match (" << i << "," << j << ")" << std::endl;
 			if ((w+i) < rows && (z+j) < cols) {
 				if (kernel[i][j] == src[w + i][z + j]) {
 					match = 1;
@@ -120,8 +114,9 @@ int** dilatation(int** src, Kernel type, int rows, int cols, int height, int wid
 	for (int i = 0; i < rows; i+=stride) {
 		for (int j = 0; j < cols; j+=stride) {
 			if (kernelMatchDilatation(src, kernel, rows, cols, height, width, i, j)) {
-				//std::cout << "(" << i << "," << j << ")" << std::endl;
-				res[i + (height / 2)][j + (width / 2)] = 1;
+				if ((i + (height / 2)) < rows && (j + (width / 2)) < cols) {
+					res[i + (height / 2)][j + (width / 2)] = 1;
+				}
 			}
 		}
 	}
@@ -139,41 +134,39 @@ int main(int argc, char** argv )
 
     Mat image;
     image = imread( argv[1], 1 );
+	cv::Mat greyMat, binaryMat;
+	cv::cvtColor(image, greyMat, cv::COLOR_BGR2GRAY);
+	cv::threshold(greyMat, binaryMat, 150, 255, cv::THRESH_BINARY);
 
-	/*
     if ( !image.data )
     {
         printf("No image data \n");
         return -1;
     }
     namedWindow("Display Image", WINDOW_AUTOSIZE );
-    imshow("Display Image", image);
+    imshow("Display Image", binaryMat);
 
     waitKey(0);
-	*/
-	//cv::Mat matrixTest( 13, 13, CV_8U );
-	int** matrixTest = new int*[13];
-	std::cout << "Start erosion..." << std::endl;
-	for (int i = 0; i < 13; i++) {
-		matrixTest[i] = new int[13] {};
-		for (int j = 0; j < 13; j++) {
-			if ((i >= 4 && i <= 8) && (j >= 3 && j <= 9)) {
-				//matrixTest.at<int>(i, j) = 1;
-				matrixTest[i][j] = 1;
-			}
-			else if (i == 1) {
-				matrixTest[i][j] = 1;
-			}
-			else {
-				matrixTest[i][j] = 0;
-				//matrixTest.at<int>(i, j) = 0;
+
+	int** binaryImage = new int*[greyMat.rows];
+	std::cout << "Start binarization..." << std::endl;
+	for (int i = 0; i < greyMat.rows; i++) {
+		binaryImage[i] = new int[greyMat.cols] {0};
+		for (int j = 0; j < greyMat.cols; j++) {
+			int r = binaryMat.ptr(i, j)[0];
+			int g = binaryMat.ptr(i, j)[1];
+			int b = binaryMat.ptr(i, j)[2];
+			if (!(r == 255 && g == 255 && b == 255)) {
+				binaryImage[i][j] = 1;
 			}
 		}
 	}
-	displayMatrix(matrixTest, 13, 13);
+	displayMatrix(binaryImage, binaryMat.rows, binaryMat.cols);
+
 	std::cout << std::endl;
+
 	Kernel type = Kernel::Rectangle;
-	int**  res = dilatation(matrixTest, type, 13, 13, 3, 1);
-	displayMatrix(res, 13, 13);
+	int**  res = dilatation(binaryImage, type, binaryMat.rows, binaryMat.cols, 3, 1);
+	displayMatrix(res, binaryMat.rows, binaryMat.cols);
     return 0;
 }
