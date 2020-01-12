@@ -17,6 +17,8 @@ void displayMatrix(int** res, int h, int w) {
 	}
 }
 
+// generate kernel according to kernel type
+
 int** get_kernel(const Kernel type, int height, int width) {
 	
 	int** kernel = new int*[height];
@@ -47,6 +49,8 @@ int** get_kernel(const Kernel type, int height, int width) {
 	
 	return kernel;
 }
+
+// Erosion
 
 int kernelMatchErosion(int** src, int** kernel, int rows, int cols, int x, int y, int w, int z) {
 	int match = 1;
@@ -85,6 +89,9 @@ int** erosion(int** src, Kernel type, int rows, int cols, int height, int width,
 	}
 	return res;
 }
+
+
+// dilatation
 
 int kernelMatchDilatation(int** src, int** kernel, int rows, int cols, int x, int y, int w, int z) {
 	int match = 0;
