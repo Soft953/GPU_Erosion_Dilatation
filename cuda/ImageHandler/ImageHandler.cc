@@ -63,6 +63,17 @@ int* ImageHandler::mat2Vec(cv::Mat mat)
     return res;
 }
 
+int* ImageHandler::mat2Vec(int** mat, int rows, int cols)
+{
+    int* res = new int[rows * cols];
+
+    for (int i = 0; i < rows; i++)
+        for (int j = 0; j < cols; j++)
+            res[i * rows + j] =  mat[i][j];
+
+    return res;
+}
+
 int** ImageHandler::vec2Mat(int* vector, int h, int w)
 {
     int** res = new int*[h];
@@ -75,6 +86,20 @@ int** ImageHandler::vec2Mat(int* vector, int h, int w)
 
     return res;
 }
+
+void ImageHandler::mat2Image(int** mat, int rows, int cols, cv::Mat* res)
+{
+    std::cout << "rows : " << rows << " cols : " << cols << std::endl;
+    for (int i = 0; i < rows; i++)
+        for (int j = 0; j < cols; j++)
+        {   
+            if (mat[i][j] == 1)
+                res->at<uchar>(i, j) = 0.;
+            
+
+        }
+}
+
 
 
 cv::Mat ImageHandler::image_get()

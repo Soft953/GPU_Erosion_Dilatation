@@ -16,7 +16,11 @@ class ImageHandler
 
         int* mat2Vec(cv::Mat mat);
 
+        int* mat2Vec(int** mat, int rows, int cols);
+
         int** vec2Mat(int* vector, int h, int w);
+
+        void mat2Image(int** mat, int rows, int cols, cv::Mat* res);
 
         cv::Mat image_get();
 
