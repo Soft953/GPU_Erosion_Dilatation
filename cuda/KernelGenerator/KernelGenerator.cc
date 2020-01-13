@@ -24,9 +24,9 @@ int** KernelGenerator::generateSquare()
 {
     int** kernel = new int*[this->rows_];
 
-    for (int i = 0; i < this->rows_; i++) {
+    for (size_t i = 0; i < this->rows_; i++) {
         kernel[i] = new int[this->cols_] {};
-        for (int j = 0; j < this->cols_; j++) {
+        for (size_t j = 0; j < this->cols_; j++) {
             kernel[i][j] = 1;
         }
     }
@@ -39,9 +39,9 @@ int** KernelGenerator::generateCircle()
     int** kernel = new int*[this->rows_];
     int radius = this->rows_;
     radius /= 2;
-    for (int i = 0; i < this->rows_; i++) {
+    for (size_t i = 0; i < this->rows_; i++) {
         kernel[i] = new int[this->cols_] {};
-        for (int j = 0; j < this->cols_; j++) 
+        for (size_t j = 0; j < this->cols_; j++) 
              kernel[i][j] = (sqrt(pow(i - radius, 2) + pow(j - radius, 2)) <= radius)? 1.0 : 0.0;
     }
 
@@ -65,8 +65,8 @@ void KernelGenerator::cols_set(size_t cols)
 
 
 void displayMatrix(int** res, size_t rows, size_t cols) {
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < cols; j++) {
+	for (size_t i = 0; i < rows; i++) {
+		for (size_t j = 0; j < cols; j++) {
 			std::cout << res[i][j] << " ";
 		}
 		std::cout << std::endl;
