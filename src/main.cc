@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <algorithm>
+#include <chrono>
 #include <opencv2/opencv.hpp>
 
 using namespace cv;
@@ -130,8 +132,24 @@ int** dilatation(int** src, Kernel type, int rows, int cols, int height, int wid
 	return res;
 }
 
+void mat2Image(int** mat, int rows, int cols, cv::Mat* res)
+{
+    //std::cout << "rows : " << rows << " cols : " << cols << std::endl;
+    for (int i = 0; i < rows; i++)
+	{
+        for (int j = 0; j < cols; j++)
+        {   
+            if (mat[i][j] == 1)
+                res->at<uchar>(i, j) = 0.;
+        }
+	}
+}
+
+
 int main(int argc, char** argv )
 {
+
+	auto start = std::chrono::high_resolution_clock::now();
 	
     if ( argc != 2 )
     {
@@ -151,9 +169,9 @@ int main(int argc, char** argv )
         return -1;
     }
     namedWindow("Display Image", WINDOW_AUTOSIZE );
-    imshow("Display Image", binaryMat);
+    //imshow("Display Image", binaryMat);
 
-    waitKey(0);
+    //waitKey(0);
 
 	int** binaryImage = new int*[greyMat.rows];
 	std::cout << "Start binarization..." << std::endl;
@@ -168,12 +186,27 @@ int main(int argc, char** argv )
 			}
 		}
 	}
-	displayMatrix(binaryImage, binaryMat.rows, binaryMat.cols);
+	//displayMatrix(binaryImage, binaryMat.rows, binaryMat.cols);
 
 	std::cout << std::endl;
 
 	Kernel type = Kernel::Rectangle;
-	int**  res = dilatation(binaryImage, type, binaryMat.rows, binaryMat.cols, 3, 1);
-	displayMatrix(res, binaryMat.rows, binaryMat.cols);
+	int**  res = dilatation(binaryImage, type, binaryMat.rows, binaryMat.cols, 5, 5);
+	//displayMatrix(res, binaryMat.rows, binaryMat.cols);
+
+	//int** mat, int rows, int cols, cv::Mat* res
+
+	cv::Mat resMat = cv::Mat(binaryMat.rows, binaryMat.cols,CV_8UC1, cv::Scalar(255));
+	mat2Image(res, binaryMat.rows, binaryMat.cols, &resMat);
+	//cv::imshow("Result", resMat);
+
+    //cv::waitKey(0);
+    cv::imwrite("some.jpg", resMat);
+
+	auto elapsed = std::chrono::high_resolution_clock::now() - start;
+
+	long long microseconds = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
+
+	std::cout << "Time: " << microseconds << "ms" << std::endl; 
     return 0;
 }
