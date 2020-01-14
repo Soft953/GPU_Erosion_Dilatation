@@ -1,8 +1,9 @@
 # include "ImageHandler.hh"
 
-ImageHandler::ImageHandler(char* path)
+ImageHandler::ImageHandler(char* path, char* name)
 {
     this->path_ = path;
+    this->name_ = name;
     // Loading Image
     this->image_ = cv::imread(this->path_, 1);
     
@@ -34,6 +35,8 @@ void ImageHandler::display_matrix(int** mat, int h, int w)
 void ImageHandler::display_image()
 {
     cv::imshow(std::string(this->path_), this->binary_mat_);
+    cv::imwrite(std::string("ref") + std::string(this->name_) + std::string(".jpg"), this->binary_mat_);
+
     cv::waitKey(0);
 
 }
@@ -49,15 +52,14 @@ int* ImageHandler::mat2Vec(cv::Mat mat)
         for (int j = 0; j < cols; j++)
         {
             int r = mat.ptr(i, j)[0];
-			int g = mat.ptr(i, j)[1];
-			int b = mat.ptr(i, j)[2];
             int tmp = 0;
 
-            if (!(r == 255 && g == 255 && b == 255)) {
-				tmp = 1;
+            if (!(r == 255 ))
+			{
+            	tmp = 1;
 			}
 
-            res[i * rows + j] =  tmp;
+            res[i * cols + j] =  tmp;
         }
 
     return res;
@@ -69,7 +71,8 @@ int* ImageHandler::mat2Vec(int** mat, int rows, int cols)
 
     for (int i = 0; i < rows; i++)
         for (int j = 0; j < cols; j++)
-            res[i * rows + j] =  mat[i][j];
+            res[i * cols + j] =  mat[i][j];
+        
 
     return res;
 }
@@ -77,19 +80,18 @@ int* ImageHandler::mat2Vec(int** mat, int rows, int cols)
 int** ImageHandler::vec2Mat(int* vector, int h, int w)
 {
     int** res = new int*[h];
-    for(int i = 0; i < w; ++i)
+    for(int i = 0; i < h; ++i)
         res[i] = new int[w];
 
     for (int i = 0; i < h; i++)
         for (int j = 0; j < w; j++)
-            res[i][j] = vector[i * h + j];
+            res[i][j] = vector[i * w + j];
 
     return res;
 }
 
 void ImageHandler::mat2Image(int** mat, int rows, int cols, cv::Mat* res)
 {
-    std::cout << "rows : " << rows << " cols : " << cols << std::endl;
     for (int i = 0; i < rows; i++)
         for (int j = 0; j < cols; j++)
         {   

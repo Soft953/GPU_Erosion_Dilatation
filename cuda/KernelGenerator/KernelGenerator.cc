@@ -36,12 +36,14 @@ int** KernelGenerator::generateSquare()
 
 int** KernelGenerator::generateCircle()
 {
+    int rows = this->rows_;
+    int cols = this->cols_;
     int** kernel = new int*[this->rows_];
     int radius = this->rows_;
     radius /= 2;
-    for (size_t i = 0; i < this->rows_; i++) {
+    for (int i = 0; i < rows; i++) {
         kernel[i] = new int[this->cols_] {};
-        for (size_t j = 0; j < this->cols_; j++) 
+        for (int j = 0; j < cols; j++) 
              kernel[i][j] = (sqrt(pow(i - radius, 2) + pow(j - radius, 2)) <= radius)? 1.0 : 0.0;
     }
 

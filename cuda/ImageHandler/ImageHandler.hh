@@ -8,7 +8,7 @@
 class ImageHandler 
 {
     public : 
-        ImageHandler(char* path);
+        ImageHandler(char* path, char* name);
 
         void display_matrix(int** mat, int h, int w);
 
@@ -34,6 +34,7 @@ class ImageHandler
     private : 
 
         char* path_;
+        char* name_;
         cv::Mat image_;
         cv::Mat greyscale_mat_;
         cv::Mat binary_mat_;

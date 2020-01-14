@@ -20,18 +20,18 @@ int main(int argc, char** argv )
 
 	std::cout << "Setting size to 19x19" << std::endl;
 	K.rows_set(19);
-	K.cols_set(19);
+	K.cols_set(10);
 	K.type_set(KernelType::Square);
 
 	std::cout << " + Square" << std::endl;
 	kernel = K.generate();
-	displayMatrix(kernel, 19, 19);
+	displayMatrix(kernel, 19, 10);
 	
 	std::cout << " + Circle" << std::endl;
 	K.type_set(KernelType::Circle);
 
 	kernel = K.generate();
-	displayMatrix(kernel, 19, 19);
+	displayMatrix(kernel, 19, 10);
 
 	std::cout << "Setting size to 25x25" << std::endl;
 	K.rows_set(25);

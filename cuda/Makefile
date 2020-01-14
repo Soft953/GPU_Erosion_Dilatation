@@ -15,7 +15,7 @@ INC = -I/home/dude/file/dude/project/gpgpu/GPGPU_Project/cuda/ImageHandler \
 
 
 ${BIN} : OBJ 
-	${CC} ${NVCCFLAGS} ${INC} ${OBJ} ${BIN}.cu -o ${BIN} ${OPENCV}
+	${CC} ${NVCCFLAGS} ${INC} -g ${OBJ} ${BIN}.cu -o ${BIN} ${OPENCV}
 OBJ : 
 	g++ ${CPPFLAGS} ${INC} -c ImageHandler/ImageHandler.cc ${OPENCV} 
 	g++ ${CPPFLAGS} ${INC} -c KernelGenerator/KernelGenerator.cc 
