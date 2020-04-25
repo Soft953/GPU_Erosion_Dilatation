@@ -1,9 +1,11 @@
 # GPGPU_Project
 
-Librairie necessaire : Opencv C++
+CPU and GPU (Cuda) implementation of binary opening/closing
 
-CPU : src/ Cmake ./gpgpu path_src
+Library Needed: Opencv C++
 
-GPU : cuda/ Makefile ./main path_src name_dst
+Run CPU: src/ Cmake ./gpgpu path_src
 
-Image de test : build/
+Run GPU: cuda/ Makefile ./main path_src name_dst
+
+Test images: build/
