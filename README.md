@@ -1,5 +1,7 @@
 # GPGPU_Project: Implement CUDA version of an image processing algorithm
 
+:computer: CUDA, C++, CMake
+
 * CPU and GPU (Cuda) implementation of binary opening/closing
 
 * Library Needed: Opencv
