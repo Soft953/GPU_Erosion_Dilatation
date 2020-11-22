@@ -1,4 +1,4 @@
-# GPGPU_Project
+# GPGPU_Project: Implement CUDA version of an image processing algorithm
 
 * CPU and GPU (Cuda) implementation of binary opening/closing
 
